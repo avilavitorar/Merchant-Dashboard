@@ -1,8 +1,10 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { provideHttpClient } from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideBrowserGlobalErrorListeners(),
-    
+    // Essa linha gerencia a detecção de mudanças e exige o Zone.js importado no main.ts
+    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideHttpClient()
   ]
 };
