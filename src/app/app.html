@@ -1,53 +1,114 @@
-<div class="dashboard-container" *ngIf="!loading; else loadingTemplate">
+<div class="dashboard-viewport" *ngIf="!loading">
 
-  <div class="top-row">
-    <div class="mini-card placeholder">Marcador Superior 1</div>
-    <div class="mini-card placeholder">Marcador Superior 2</div>
-    <div class="mini-card placeholder">Marcador Superior 3</div>
-  </div>
+  <header class="dashboard-header">
+    <div class="title-row">
+      <span class="yellow-badge"></span>
+      <h1>Merchant Status Dashboard</h1>
+    </div>
+    <p class="current-date">{{ currentDateStr }}</p>
+  </header>
 
-  <div class="main-row">
-    <div class="chart-card">
-      <h3 class="card-title">OB Status Distribution</h3>
+  <div class="top-cards-grid">
 
-      <div class="card-content">
-<div class="chart-wrapper">
-  <apx-chart
-  *ngIf="chartOptions && chartOptions.series && chartOptions.series.length > 0"
-  [series]="chartOptions.series"
-  [chart]="chartOptions.chart"
-  [colors]="chartOptions.colors"
-  [labels]="chartOptions.labels" [plotOptions]="chartOptions.plotOptions"
-  [stroke]="chartOptions.stroke"
-  [legend]="chartOptions.legend"
-  [dataLabels]="chartOptions.dataLabels"
-  [tooltip]="chartOptions.tooltip">
-</apx-chart>
-  <div class="center-subtext">Total</div>
-</div>
-
-        <div class="legend-wrapper">
-          <ul>
-            <li *ngFor="let item of processedLegend">
-              <span class="bullet" [style.backgroundColor]="item.color"></span>
-              <span class="label-text">
-                <strong class="name">{{ item.name }}</strong>
-                <span class="pct">{{ item.percentage }}%</span>
-                <span class="qty">({{ item.value }})</span>
-                <span class="diff" [ngClass]="{'positive': item.diff.includes('+'), 'negative': item.diff.includes('-')}">
-                  {{ item.diff }}
-                </span>
-              </span>
-            </li>
-          </ul>
+    <div class="metrics-card">
+      <div class="card-main-content">
+        <div class="card-info">
+          <div class="icon-badge">
+            <svg viewBox="0 0 24 24" class="svg-icon-large">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+            </svg>
+          </div>
+          <div class="text-group">
+            <h3 class="card-title">Must Have Signed Rate</h3>
+            <p class="card-subtitle">{{ currentSigned }} of {{ currentMustHaveTotal }} Merchants</p>
+          </div>
+        </div>
+        <div class="card-value-wrapper">
+          <span class="card-value">{{ signedPercentage }}%</span>
         </div>
       </div>
 
+      <div class="progress-bar-container">
+        <div class="progress-bar-fill" [style.width.%]="signedPercentage"></div>
+      </div>
     </div>
+
+    <div class="metrics-card">
+      <div class="card-main-content">
+        <div class="card-info">
+          <div class="icon-badge">
+            <svg viewBox="0 0 24 24" class="svg-icon-large">
+              <path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/>
+            </svg>
+          </div>
+          <div class="text-group">
+            <h3 class="card-title">Must Have Signed DoD</h3>
+            <p class="card-subtitle">Day-over-day growth</p>
+          </div>
+        </div>
+
+        <div class="card-right-block">
+          <span class="card-value highlight-green">{{ dodGrowthStr }}</span>
+
+          <div class="sparkline-container">
+            <div class="bar bar-1"></div>
+            <div class="bar bar-2"></div>
+            <div class="bar bar-3"></div>
+            <div class="bar bar-4"></div>
+            <div class="bar bar-5"></div>
+            <div class="bar bar-6"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="metrics-card empty-placeholder">
+      <h3 class="card-title">Must Have Signed DoD (Chart)</h3>
+      <p class="card-subtitle">Aguardando mini-gráfico...</p>
+    </div>
+
   </div>
 
+  <div class="main-chart-card">
+    <h2 class="main-card-title">OB Status Distribution</h2>
+
+    <div class="chart-flex-container">
+      <div class="chart-wrapper">
+        <apx-chart
+          *ngIf="chartOptions && chartOptions.series"
+          [series]="chartOptions.series"
+          [chart]="chartOptions.chart"
+          [colors]="chartOptions.colors"
+          [labels]="chartOptions.labels"
+          [plotOptions]="chartOptions.plotOptions"
+          [stroke]="chartOptions.stroke"
+          [legend]="chartOptions.legend"
+          [dataLabels]="chartOptions.dataLabels"
+          [tooltip]="chartOptions.tooltip">
+        </apx-chart>
+      </div>
+
+      <div class="custom-legend-container">
+        <div class="legend-item" *ngFor="let item of processedLegend">
+          <div class="legend-left">
+            <span class="legend-dot" [style.background-color]="item.color"></span>
+            <span class="legend-name">{{ item.name }}</span>
+          </div>
+          <div class="legend-right">
+            <span class="legend-pct" [style.color]="item.color">{{ item.percentage }}%</span>
+            <span class="legend-val">({{ item.value }})</span>
+            <span class="legend-diff" [ngClass]="{'positive': item.diff.includes('+'), 'negative': item.diff.includes('-')}">
+              {{ item.diff }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<ng-template #loadingTemplate>
-  <div class="loading-box">Carregando dados do Dashboard...</div>
-</ng-template>
+<div class="global-loading" *ngIf="loading">
+  <div class="spinner"></div>
+  <p>Carregando dados do dashboard...</p>
+</div>
+
