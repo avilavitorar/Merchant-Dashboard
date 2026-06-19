@@ -11,6 +11,7 @@ export interface SheetRow {
   PreOpening: string;
   Total: string;
   Data: string;
+  PT: string;
 }
 
 // 🔥 NOVA INTERFACE: Representa exatamente a aba MustHave da planilha

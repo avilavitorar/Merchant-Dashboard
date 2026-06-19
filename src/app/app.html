@@ -27,9 +27,29 @@
           <span class="card-value">{{ signedPercentage }}%</span>
         </div>
       </div>
-
       <div class="progress-bar-container">
         <div class="progress-bar-fill" [style.width.%]="signedPercentage"></div>
+      </div>
+    </div>
+
+    <div class="metrics-card content-card-three">
+      <div class="card-main-content">
+        <div class="card-info">
+          <div class="icon-badge">
+            <svg viewBox="0 0 24 24" class="svg-icon-large">
+              <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-8 12.5c-2.49 0-4.5-2.01-4.5-4.5S9.51 7.5 12 7.5s4.5 2.01 4.5 4.5-2.01 4.5-4.5 4.5zm0-7c-1.38 0-2.5 1.12-2.5 2.5s1.12 2.5 2.5 2.5 2.5-1.12 2.5-2.5-1.12-2.5-2.5-2.5z"/>
+            </svg>
+          </div>
+          <div class="text-group">
+            <span class="card-value-large">{{ totalMerchants }}</span>
+            <h3 class="card-title-main">Total Merchants Signed</h3>
+            <p class="card-subtitle-breakdown">Regular: {{ regularCount }} · PT: {{ ptCount }}</p>
+          </div>
+        </div>
+
+<div class="badge-dod-container" *ngIf="ptDodDeltaStr !== undefined">
+  <span class="badge-dod-text">{{ ptDodDeltaStr }} DoD ↑</span>
+</div>
       </div>
     </div>
 
@@ -49,7 +69,6 @@
 
         <div class="card-right-block">
           <span class="card-value highlight-green">{{ dodGrowthStr }}</span>
-
           <div class="sparkline-container">
             <div class="bar bar-1"></div>
             <div class="bar bar-2"></div>
@@ -60,11 +79,6 @@
           </div>
         </div>
       </div>
-    </div>
-
-    <div class="metrics-card empty-placeholder">
-      <h3 class="card-title">Must Have Signed DoD (Chart)</h3>
-      <p class="card-subtitle">Aguardando mini-gráfico...</p>
     </div>
 
   </div>
@@ -97,18 +111,17 @@
           <div class="legend-right">
             <span class="legend-pct" [style.color]="item.color">{{ item.percentage }}%</span>
             <span class="legend-val">({{ item.value }})</span>
-            <span class="legend-diff" [ngClass]="{'positive': item.diff.includes('+'), 'negative': item.diff.includes('-')}">
-              {{ item.diff }}
-            </span>
+<span class="legend-diff"
+      [ngClass]="{
+        'positive': item.diff.includes('+'),
+        'negative': item.diff.includes('-'),
+        'neutral': item.diff === '[0]'
+      }">
+  {{ item.diff }}
+</span>
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-
-<div class="global-loading" *ngIf="loading">
-  <div class="spinner"></div>
-  <p>Carregando dados do dashboard...</p>
-</div>
-
